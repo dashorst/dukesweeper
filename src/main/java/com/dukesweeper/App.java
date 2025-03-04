@@ -6,9 +6,13 @@ import java.awt.event.WindowEvent;
 
 import com.dukesweeper.model.GameBoard;
 import com.dukesweeper.ui.GamePanel;
+import com.dukesweeper.util.GraphicsPrewarmer;
 
 public class App {
     public static void main(String[] args) {
+        // Pre-warm the graphics text rendering to avoid macOS 2-3 second delay
+        GraphicsPrewarmer.prewarmGraphics();
+        
         // Create the game board
         GameBoard gameBoard = new GameBoard();
         
