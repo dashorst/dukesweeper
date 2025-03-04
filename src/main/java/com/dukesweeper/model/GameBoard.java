@@ -10,7 +10,7 @@ public class GameBoard {
     // Adjusted grid dimensions to fit within 800px width at 16px per cell
     private static final int COLS = 50; // 50 * 16px = 800px wide
     private static final int ROWS = 30; // Reduced for a reasonable aspect ratio
-    private static final double BEAN_PROBABILITY = 1.0 / 32.0;
+    private static final double BEAN_PROBABILITY = 1.0 / 20.0;
     
     // Grid of booleans where true represents a coffee bean
     private boolean[][] grid;
