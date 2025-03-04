@@ -26,6 +26,7 @@ public class GamePanel extends Canvas {
     private GameBoard gameBoard;
     private Font font;
     private Image gameOverImage;
+    private Image youWonImage;  // Add image for win state
     
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -40,7 +41,8 @@ public class GamePanel extends Canvas {
         
         // Load game over image
         gameOverImage = ImageLoader.loadAndScaleImage("/images/gameover.png", width/2, -height/2);
-        
+        youWonImage = ImageLoader.loadAndScaleImage("/images/youwon.png", width/2, -height/2);
+                
         // Add mouse listener to handle cell clicks
         addMouseListener(new MouseAdapter() {
             @Override
@@ -112,11 +114,13 @@ public class GamePanel extends Canvas {
         }
         
         // Draw game over image if game is over
-        if (gameBoard.isGameOver()) {
-            int width = gameBoard.getCols() * CELL_SIZE; // Should be 800px (50 * 16)
-            int height = gameBoard.getRows() * CELL_SIZE; // Should be 800px (50 * 16)
+        int width = gameBoard.getCols() * CELL_SIZE; // Should be 800px (50 * 16)
+        int height = gameBoard.getRows() * CELL_SIZE; // Should be 800px (50 * 16)
 
+        if (gameBoard.isGameOver()) {
             g.drawImage(gameOverImage, width / 4, height / 2 - gameOverImage.getHeight(null) / 2, this);
+        } else if (gameBoard.isGameWon()) {
+            g.drawImage(youWonImage, width / 4, height / 2 - youWonImage.getHeight(null) / 2, this);
         }
     }
     

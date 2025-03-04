@@ -20,6 +20,7 @@ public class GameBoard {
     private Random random;
     // Track if the game is over
     private boolean gameOver;
+    private boolean gameWon;  // Add a field to track if game is won
     
     /**
      * Creates a new game board and initializes it with randomly placed beans.
@@ -30,6 +31,7 @@ public class GameBoard {
         markedSquares = new boolean[ROWS][COLS];
         random = new Random();
         gameOver = false;
+        gameWon = false;
         initializeGrid();
     }
     
@@ -142,6 +144,9 @@ public class GameBoard {
             }
         }
         
+        // After revealing, check if the player has won
+        checkWinCondition();
+        
         return grid[row][col];
     }
     
@@ -175,5 +180,35 @@ public class GameBoard {
      */
     public boolean isMarked(int row, int col) {
         return markedSquares[row][col];
+    }
+    
+    /**
+     * Checks if the game has been won.
+     * The game is won when all non-mine cells have been revealed.
+     */
+    public void checkWinCondition() {
+        // If the game is already over, don't check for win
+        if (gameOver) {
+            return;
+        }
+        
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                // If a cell doesn't have a bean and is not revealed, we haven't won yet
+                if (!hasBean(row, col) && !isRevealed(row, col)) {
+                    return;
+                }
+            }
+        }
+        
+        // If we get here, all non-bean cells are revealed
+        gameWon = true;
+    }
+    
+    /**
+     * @return true if the game is won, false otherwise
+     */
+    public boolean isGameWon() {
+        return gameWon;
     }
 }
