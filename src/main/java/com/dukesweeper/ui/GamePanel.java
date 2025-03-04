@@ -44,11 +44,18 @@ public class GamePanel extends Canvas {
         // Add mouse listener to handle cell clicks
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 int col = e.getX() / CELL_SIZE;
                 int row = e.getY() / CELL_SIZE;
                 
-                if (col >= 0 && col < gameBoard.getCols() && row >= 0 && row < gameBoard.getRows()) {
+                // Right-click or shift+left-click to mark a square
+                if (e.getButton() == MouseEvent.BUTTON3 || 
+                    (e.getButton() == MouseEvent.BUTTON1 && e.isShiftDown())) {
+                    gameBoard.toggleMark(row, col);
+                    repaint();
+                } 
+                // Normal left-click to reveal a square
+                else if (e.getButton() == MouseEvent.BUTTON1) {
                     gameBoard.revealCell(row, col);
                     repaint();
                 }
@@ -64,13 +71,21 @@ public class GamePanel extends Canvas {
                 int x = col * CELL_SIZE;
                 int y = row * CELL_SIZE;
                 
-                // Draw cell background
                 if (gameBoard.isRevealed(row, col)) {
+                    // Draw cell background
                     g.setColor(Color.WHITE);
                 } else {
+                    // Draw unrevealed square
                     g.setColor(UNREVEALED_COLOR);
+                    g.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+                    
+                    // Draw mark if square is marked
+                    if (gameBoard.isMarked(row, col)) {
+                        g.setColor(Color.RED);
+                        g.setFont(new Font("Arial", Font.BOLD, 20));
+                        g.drawString("!", x + CELL_SIZE/2 - 4, y + CELL_SIZE/2 + 7);
+                    }
                 }
-                g.fillRect(x, y, CELL_SIZE, CELL_SIZE);
                 
                 // Draw cell content if revealed
                 if (gameBoard.isRevealed(row, col)) {

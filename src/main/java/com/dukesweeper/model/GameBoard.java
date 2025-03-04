@@ -16,6 +16,7 @@ public class GameBoard {
     private boolean[][] grid;
     // Grid to track which cells have been revealed by the player
     private boolean[][] revealed;
+    private boolean[][] markedSquares;
     private Random random;
     // Track if the game is over
     private boolean gameOver;
@@ -26,6 +27,7 @@ public class GameBoard {
     public GameBoard() {
         grid = new boolean[ROWS][COLS];
         revealed = new boolean[ROWS][COLS];
+        markedSquares = new boolean[ROWS][COLS];
         random = new Random();
         gameOver = false;
         initializeGrid();
@@ -150,5 +152,28 @@ public class GameBoard {
      */
     public boolean isGameOver() {
         return gameOver;
+    }
+    
+    /**
+     * Toggles the mark on the cell at the given position.
+     * 
+     * @param row The row index
+     * @param col The column index
+     */
+    public void toggleMark(int row, int col) {
+        if (!isRevealed(row, col) && !isGameOver()) {
+            markedSquares[row][col] = !markedSquares[row][col];
+        }
+    }
+    
+    /**
+     * Checks if the cell at the given position is marked.
+     * 
+     * @param row The row index
+     * @param col The column index
+     * @return true if the cell is marked, false otherwise
+     */
+    public boolean isMarked(int row, int col) {
+        return markedSquares[row][col];
     }
 }
