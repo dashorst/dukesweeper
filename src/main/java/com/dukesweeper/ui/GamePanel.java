@@ -5,10 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import com.dukesweeper.model.GameBoard;
+import com.dukesweeper.util.ImageLoader;
 
 /**
  * Canvas component that draws the DukeSweeper game grid and handles user interactions.
@@ -23,6 +25,7 @@ public class GamePanel extends Canvas {
     
     private GameBoard gameBoard;
     private Font font;
+    private Image gameOverImage;
     
     public GamePanel(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -34,6 +37,9 @@ public class GamePanel extends Canvas {
         
         // Increase font size to fit the larger cells
         font = new Font("Monospaced", Font.BOLD, 14);
+        
+        // Load game over image
+        gameOverImage = ImageLoader.loadAndScaleImage("/images/gameover.png", width/2, -height/2);
         
         // Add mouse listener to handle cell clicks
         addMouseListener(new MouseAdapter() {
@@ -88,6 +94,14 @@ public class GamePanel extends Canvas {
                 g.setColor(GRID_COLOR);
                 g.drawRect(x, y, CELL_SIZE, CELL_SIZE);
             }
+        }
+        
+        // Draw game over image if game is over
+        if (gameBoard.isGameOver()) {
+            int width = gameBoard.getCols() * CELL_SIZE; // Should be 800px (50 * 16)
+            int height = gameBoard.getRows() * CELL_SIZE; // Should be 800px (50 * 16)
+
+            g.drawImage(gameOverImage, width / 4, height / 2 - gameOverImage.getHeight(null) / 2, this);
         }
     }
     

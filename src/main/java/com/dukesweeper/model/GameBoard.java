@@ -17,6 +17,8 @@ public class GameBoard {
     // Grid to track which cells have been revealed by the player
     private boolean[][] revealed;
     private Random random;
+    // Track if the game is over
+    private boolean gameOver;
     
     /**
      * Creates a new game board and initializes it with randomly placed beans.
@@ -25,6 +27,7 @@ public class GameBoard {
         grid = new boolean[ROWS][COLS];
         revealed = new boolean[ROWS][COLS];
         random = new Random();
+        gameOver = false;
         initializeGrid();
     }
     
@@ -114,11 +117,17 @@ public class GameBoard {
      * @return true if a bean was revealed, false otherwise
      */
     public boolean revealCell(int row, int col) {
-        if (row < 0 || row >= ROWS || col < 0 || col >= COLS || revealed[row][col]) {
+        if (row < 0 || row >= ROWS || col < 0 || col >= COLS || revealed[row][col] || gameOver) {
             return false;
         }
         
         revealed[row][col] = true;
+        
+        // Check if a bean was hit and set game over state
+        if (grid[row][col]) {
+            gameOver = true;
+            return true;
+        }
         
         // If this cell has no surrounding beans and is not a bean itself,
         // automatically reveal adjacent cells (flood fill)
@@ -132,5 +141,14 @@ public class GameBoard {
         }
         
         return grid[row][col];
+    }
+    
+    /**
+     * Checks if the game is over.
+     * 
+     * @return true if the game is over, false otherwise
+     */
+    public boolean isGameOver() {
+        return gameOver;
     }
 }
